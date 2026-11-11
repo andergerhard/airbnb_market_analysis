@@ -14,7 +14,7 @@ This project analyses Airbnb listings in **Barcelona, Berlin and Amsterdam** fro
 
 ## Data
 - Source: Inside Airbnb (insideairbnb.com)
-- Snapshots: Barcelona (date), Berlin (date), Amsterdam (date)
+- Snapshots: Barcelona (18 Sep 2026), Berlin (20 Sep 2026), Amsterdam (17 Sep 2026)
 
 ## Data Cleaning Decisions
 
