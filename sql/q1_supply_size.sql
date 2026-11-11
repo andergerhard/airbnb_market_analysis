@@ -1,5 +1,5 @@
 -- ============================================================
--- Q1. Supply size
+-- Q1. SUPPLY SIZE
 -- How many listings does each city have, and what share are
 -- entire homes (the listing type most likely to substitute
 -- a hotel stay)?
