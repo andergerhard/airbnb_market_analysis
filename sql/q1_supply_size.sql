@@ -28,12 +28,11 @@ JOIN city_population USING (city)
 GROUP BY city, population
 ORDER BY total_listings DESC;
 
--- Result: Barcelona has the largest absolute supply, but Amsterdam has the
--- highest density: 11.3 listings and 9.1 entire homes per 1,000 residents,
--- versus 8.8 / 6.1 in Barcelona and only 3.2 / 2.2 in Berlin.
+-- Result: Amsterdam has the highest density (11.3 listings and 9.1 entire
+-- homes per 1,000 residents), ahead of Barcelona (8.8 / 6.1) and Berlin
+-- (3.2 / 2.2), despite Barcelona having the largest absolute supply.
 -- Amsterdam also has the highest share of entire homes (80.8%).
--- Note: Berlin's lower density partly reflects its size, as the city
--- includes large residential outskirts with little tourist activity.
+-- Note: Berlin's low density partly reflects its large residential outskirts.
 
 -- ------------------------------------------------------------
 -- 1.2 Room type mix by city
@@ -51,10 +50,9 @@ GROUP BY city,room_type
 ORDER BY city, listings DESC;
 
 -- Result: Entire homes and private rooms make up over 98% of supply in all
--- three cities. Hotel rooms are marginal (≤0.5%), so competition for hotels
--- comes almost entirely from residential properties. Amsterdam is the most
--- focused on entire homes (80.8%, with only 18.7% private rooms), while
--- Barcelona and Berlin show a very similar mix (~69% / ~30%).
+-- cities; hotel rooms are marginal (<=0.5%). Amsterdam is the most focused
+-- on entire homes (80.8% vs 18.7% private rooms), while Barcelona and Berlin
+-- show a similar mix (~69% entire homes / ~30% private rooms).
 
 -- ------------------------------------------------------------
 -- 1.3 Top 5 neighbourhoods by number of listings in each city
@@ -90,10 +88,8 @@ SELECT city, COUNT(DISTINCT neighbourhood_cleansed) AS n_neighbourhoods
 FROM listings
 GROUP BY city;
 
--- Result: Supply concentrates in central or near-central areas in all three
--- cities: la Dreta de l'Eixample alone holds 14.3% of Barcelona's listings,
--- Alexanderplatz leads in Berlin (6.9%), and in Amsterdam the top area is
--- De Baarsjes - Oud-West (17.3%), next to the historic centre.
--- Note: cities use neighbourhood units of very different size (22 areas in
--- Amsterdam, 68 in Barcelona, 137 in Berlin), so neighbourhood shares are
--- only comparable within each city, not between cities.
+-- Result: Supply concentrates in central areas: la Dreta de l'Eixample (14.3%
+-- of Barcelona's listings), Alexanderplatz (6.9% in Berlin) and De Baarsjes -
+-- Oud-West (17.3% in Amsterdam, next to the historic centre) lead in each city.
+-- Note: neighbourhood units differ in size (22 in Amsterdam, 68 in Barcelona,
+-- 137 in Berlin), so shares are only comparable within each city.
