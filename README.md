@@ -331,4 +331,4 @@ License declaration by host type follows **a different pattern in each city**:
 
 ## Tools
 
-Python (pandas, seaborn), PostgreSQL, Power BI
+Python (pandas, seaborn), PostgreSQL, Tableau
