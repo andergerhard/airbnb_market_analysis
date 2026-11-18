@@ -426,7 +426,7 @@ airbnb_market_analysis/
 │   ├── q4_professionalisation.sql
 │   └── q5_regulation.sql
 ├── visuals/                  # charts and dashboard screenshots
-├── README.md
+└── README.md
 ```
 
 ## How to Reproduce
