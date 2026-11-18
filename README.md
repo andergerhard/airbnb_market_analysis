@@ -27,7 +27,7 @@ All cleaning steps were first explored on Barcelona and then grouped into a sing
 - `neighbourhood_group_cleansed` is empty for Amsterdam, so district-level comparisons across the three cities are not possible.
 
 **Column selection**
-- From ~80 original columns, 21 were kept, covering location, property type, price, host, reviews and license.
+- From ~90 original columns, 21 were kept, covering location, property type, price, host, reviews and license.
 
 **Price**
 - Prices were stored as text (e.g. `"$1,234.00"`); the `$` and thousands separator were removed and the column converted to numeric. All three cities use EUR, despite the `$` symbol in the raw data.
@@ -55,6 +55,9 @@ Limitations of this field:
 
 **Personal data**
 - The original `license` text was dropped from the clean dataset, as it contains host names and addresses. Raw license texts from Berlin are not displayed in the notebooks.
+
+**Dashboard support**
+- `is_top5_operator` flags listings belonging to the 5 largest hosts in each city. It is computed in Python so the dashboard can show the share of listings controlled by the largest operators.
 
 ## Analysis & Key Findings
 
