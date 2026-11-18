@@ -1,5 +1,56 @@
 # Airbnb Market Analysis: Barcelona vs Berlin vs Amsterdam
 
+Market intelligence analysis of the short-term rental market in three European cities, from the perspective of a **hospitality company**: how large and competitive the Airbnb supply is, what prices and revenue listings achieve, who runs the supply and how much of it declares a license.
+
+**Tools:** Python (pandas, matplotlib, seaborn) · PostgreSQL · Tableau
+**Interactive dashboard:** [View on Tableau Public](TABLEAU_PUBLIC_LINK)
+
+---
+
+## Key Findings
+
+1. **Amsterdam has the densest and most expensive market, but regulation limits it.** It has 11.3 listings per 1,000 residents (vs 8.8 in Barcelona and 3.2 in Berlin) and the highest prices (median entire home: €329 per night). However, its entire homes are occupied a median of only **31 nights per year**, matching the city's 30-night cap, so they earn the **lowest annual revenue** of the three cities (€11,821).
+2. **Barcelona's entire homes compete with hotels all year round.** They combine good occupancy (168 nights) with medium-high prices and generate the highest median revenue (**€34,710 per year**). The most occupied segment is mid-priced entire homes (€162–231 per night), close to mid-range hotels.
+3. **Barcelona is the most professionalised market.** Only **5% of hosts control 49% of listings**, and the 5 largest operators alone manage 1 in 8 listings. In Amsterdam, single-listing hosts provide 81% of the supply.
+4. **Guests rate professional operators lower in all three cities** (median score 4.64–4.73 vs 4.82–4.96 for single-listing hosts).
+5. **Licensing is weakest in Barcelona's active market:** nearly **3 in 10 active listings** show no license information, vs 5% in Amsterdam and 8% in Berlin.
+
+**What this means for a hotel company:** competition from short-term rentals is strongest in **Barcelona**, where a professionalised, year-round supply of entire homes targets the same price segment as mid-range hotels. In **Amsterdam**, regulation keeps entire homes from operating as full-time accommodation, and in **Berlin** the supply is cheaper and more spread out across the city.
+
+---
+
+## Dashboard
+
+Two interactive pages built in Tableau: **[View on Tableau Public](TABLEAU_PUBLIC_LINK)**
+
+**Market overview:** supply, density, prices and revenue by room type.
+
+![Market overview dashboard](visuals/dashboard_market_overview.png)
+
+**Hosts & regulation:** professionalisation of the market and license status by city.
+
+![Hosts and regulation dashboard](visuals/dashboard_hosts_and_regulation.png)
+
+---
+
+## Visual Analysis (Python)
+
+Three analyses that go beyond aggregated figures ([`notebooks/02_analysis.ipynb`](notebooks/02_analysis.ipynb)):
+
+**Geographic concentration:** listings per hexagon within the same 20 x 20 km window around each city centre. Barcelona has a single dense core, Amsterdam a ring around the historic centre and Berlin several separate clusters.
+
+![Maps of listing concentration](visuals/01_maps.png)
+
+**Price distribution:** Amsterdam is the most expensive market for both entire homes and private rooms.
+
+![Price boxplot](visuals/02_price_boxplot.png)
+
+**Occupancy distribution:** Amsterdam's entire homes cluster around the 30-night cap, while in Barcelona and Berlin a large share of listings is occupied almost all year (the peak at ~255 nights is Inside Airbnb's 70% occupancy cap).
+
+![Occupancy distribution](visuals/03_occupancy_distribution.png)
+
+---
+
 ## Context
 Short-term rentals have become a significant part of the accommodation supply in major European cities, competing directly with hotels for the same travellers. However, the size, pricing, professionalisation and regulation of this market vary widely from city to city.
 
@@ -13,55 +64,26 @@ This project analyses Airbnb listings in **Barcelona, Berlin and Amsterdam** fro
 5. **Regulation:** What share of listings declares a license in each city, and where is the short-term rental supply most controlled?
 
 ## Data
-- Source: Inside Airbnb (insideairbnb.com)
-- Snapshots: Barcelona (18 Sep 2026), Berlin (20 Sep 2026), Amsterdam (17 Sep 2026)
+- **Listings:** [Inside Airbnb](https://insideairbnb.com/get-the-data/), detailed `listings.csv.gz` for each city. Snapshots: Barcelona (18 Sep 2026), Berlin (20 Sep 2026), Amsterdam (17 Sep 2026). Data downloaded in November 2026.
+- **Population** (for density per 1,000 residents): official residents registers as of 1 January 2026 (Ajuntament de Barcelona, Amt für Statistik Berlin-Brandenburg, CBS).
 
-## Data Cleaning Decisions
+## Approach
 
-All cleaning steps were first explored on Barcelona and then grouped into a single function (`clean_listings()`) applied to the three cities, so the same rules are used everywhere. No listings were removed during cleaning: the final dataset contains 38,224 listings (Barcelona 15,236 · Berlin 12,376 · Amsterdam 10,612).
+| Step | Tool | Where |
+|---|---|---|
+| Data cleaning, quality checks and load to PostgreSQL | Python (pandas, SQLAlchemy) | [`notebooks/01_cleaning.ipynb`](notebooks/01_cleaning.ipynb) |
+| Business questions: aggregations, rankings and comparisons | SQL (PostgreSQL) | [`sql/`](sql/) |
+| Visual analysis: maps and distributions | Python (matplotlib, seaborn) | [`notebooks/02_analysis.ipynb`](notebooks/02_analysis.ipynb) |
+| Interactive dashboard | Tableau | [Tableau Public](TABLEAU_PUBLIC_LINK) |
 
-**Data quality checks**
-- No duplicate listings were found.
-- Missing values follow clear patterns: missing reviews correspond exactly to listings with 0 reviews, and missing revenue corresponds exactly to listings without price. Missing values are therefore kept, as they reflect real situations rather than errors.
-- `minimum_nights` is missing for 13.4% of Barcelona listings; the cause could not be identified, and the column is not central to the analysis.
-- `neighbourhood_group_cleansed` is empty for Amsterdam, so district-level comparisons across the three cities are not possible.
+---
 
-**Column selection**
-- From ~90 original columns, 21 were kept, covering location, property type, price, host, reviews and license.
+## Detailed Findings by Question
 
-**Price**
-- Prices were stored as text (e.g. `"$1,234.00"`); the `$` and thousands separator were removed and the column converted to numeric. All three cities use EUR, despite the `$` symbol in the raw data.
-- Some listings have no price: 17.2% in Barcelona, 34.1% in Berlin and 43.1% in Amsterdam. They are kept in the dataset but excluded from price and revenue analyses, since revenue estimates depend on price. These listings are mostly inactive, so price analyses mainly reflect the active market (see Limitations).
-- Prices are strongly right-skewed (in Barcelona, mean 253€ vs median 191€), so the **median** is used instead of the mean.
-- Listings above the **99th price percentile of each city** are flagged as outliers (`is_price_outlier`) and excluded from price analyses. The most expensive listings had no reviews, and at least one showed a monthly price entered as nightly. A city-specific threshold is used because price levels differ between cities.
+Click on each question to expand the detailed results (from the SQL queries in [`sql/`](sql/)).
 
-**Data types**
-- `host_is_superhost` converted from `"t"`/`"f"` to boolean.
-- `last_review` converted from text to date.
-
-**Host type**
-- Hosts are grouped by the number of listings they manage in the city (`calculated_host_listings_count`): **single** (1), **multi** (2–9) and **professional** (10+).
-
-**License status**
-The `license` field is free text written by hosts, with a different format in each city. It was grouped into four categories, applied in this order (each rule overrides the previous one):
-1. `missing`: no license information
-2. `exempt`: contains "Exempt"
-3. `number_declared`: contains a digit (registration code)
-4. `identity_info`: contains "Legal entity name" or "First name and Last name". In Berlin, many hosts publish company or personal details instead of a registration number. These texts contain digits (postcodes, street numbers), so without this rule they would have been wrongly counted as `number_declared`.
-
-Limitations of this field:
-- Registration numbers are **self-declared and not validated** against official registries. Some are clearly placeholders (e.g. `HUTB-123456` in 12 listings in Barcelona, `ABCD 1234 AB12 89EF A0F9` in 10 listings in Amsterdam), so `number_declared` is an **upper bound** of properly licensed listings.
-- `identity_info` does not mean the listing is unlicensed, only that no registration number is shown.
-
-**Personal data**
-- The original `license` text was dropped from the clean dataset, as it contains host names and addresses. Raw license texts from Berlin are not displayed in the notebooks.
-
-**Dashboard support**
-- `is_top5_operator` flags listings belonging to the 5 largest hosts in each city. It is computed in Python so the dashboard can show the share of listings controlled by the largest operators.
-
-## Analysis & Key Findings
-
-### 1. Supply size
+<details>
+<summary><b>1. Supply size</b></summary>
 
 **1.1 Supply size and density**
 
@@ -90,9 +112,12 @@ In all three cities, supply concentrates in **central or near-central areas**:
 - **Berlin:** Alexanderplatz leads with **6.9%**, with supply more evenly spread across the city.
 - **Amsterdam:** the top area is De Baarsjes - Oud-West (**17.3%**), next to the historic centre; Centrum-West and Centrum-Oost together add another 20.7%.
 
-*Note: cities use neighbourhood units of very different size (22 areas in Amsterdam, 68 in Barcelona, 137 in Berlin), so neighbourhood shares are only comparable within each city, not between cities. The maps in the Python analysis provide a fairer comparison of geographic concentration.*
+*Note: cities use neighbourhood units of very different size (22 areas in Amsterdam, 68 in Barcelona, 137 in Berlin), so neighbourhood shares are only comparable within each city, not between cities. The map in the Python analysis provides a fairer comparison of geographic concentration.*
 
-### 2. Pricing
+</details>
+
+<details>
+<summary><b>2. Pricing</b></summary>
 
 **2.1 Median price by city**
 
@@ -152,7 +177,10 @@ Barcelona's supply also **skews towards larger homes** (2–3 bedrooms), while 1
 
 Even **Berlin's most expensive neighbourhood (203€) is below Barcelona's median entire-home price (220€)**, and far below Amsterdam's top 5 (all above 350€).
 
-### 3. Performance
+</details>
+
+<details>
+<summary><b>3. Performance</b></summary>
 
 **3.1 Occupancy by city**
 
@@ -204,7 +232,10 @@ Even **Berlin's most expensive neighbourhood (203€) is below Barcelona's media
 
 The **strongest competition for hotels** therefore comes from **mid-priced entire homes**, the segment closest to mid-range hotels.
 
-### 4. Professionalisation
+</details>
+
+<details>
+<summary><b>4. Professionalisation</b></summary>
 
 **4.1 Market structure by host type**
 
@@ -221,11 +252,6 @@ The three cities show **very different market structures**:
 - **Amsterdam is a market of individual hosts:** 93.5% of hosts have a single listing and provide 81.3% of supply, while professionals (only 24 hosts) hold just 3.0%. This is consistent with Amsterdam's rule that **hosts must live at the address they rent out**.
 - **Berlin sits in between:** single hosts provide 53.6% of listings and professionals 15.7%.
 
-Q4.
-Ámsterdam es un mercado de particulares. El 93,5% de los anfitriones tiene un solo anuncio, y los profesionales apenas suman un 3% de la oferta. Encaja con su regulación: además del límite de noches, el anfitrión debe vivir y estar empadronado en la dirección. Es decir, la ley solo permite alquilar tu propia vivienda, lo que hace casi imposible gestionar muchos pisos. 
-airroi
-Barcelona es un mercado profesionalizado. Un 5,3% de anfitriones controla casi la mitad de los anuncios. Solo un 19,5% de la oferta es de particulares con un único piso.
-Berlín está en medio: la mayoría de los anuncios son de particulares (53,6%), pero los profesionales tienen un peso relevante (15,7%).
 
 **4.2 Performance by host type (entire homes)**
 
@@ -263,7 +289,10 @@ The size of the largest operators **differs greatly between cities**:
 
 Together with 4.1, this shows that **Barcelona's supply is not only professionalised but also concentrated in a few large operators**, whose business model is closer to that of an **aparthotel** than to home sharing.
 
-### 5. Regulation
+</details>
+
+<details>
+<summary><b>5. Regulation</b></summary>
 
 **5.1 License status by city**
 
@@ -319,16 +348,96 @@ License declaration by host type follows **a different pattern in each city**:
 - **Barcelona:** the gap **persists in the active market**. Nearly **3 in 10 active listings** still show no license information, the **largest compliance gap among listings actually competing with hotels**.
 - **Amsterdam** remains stable (around 89% declared numbers and 5% missing) for all and active listings.
 
+</details>
+
+---
+
+## Data Cleaning Decisions
+
+All cleaning steps were first explored on Barcelona and then grouped into a single function (`clean_listings()`) applied to the three cities, so the same rules are used everywhere. No listings were removed during cleaning: the final dataset contains 38,224 listings (Barcelona 15,236 · Berlin 12,376 · Amsterdam 10,612).
+
+**Data quality checks**
+- No duplicate listings were found.
+- Missing values follow clear patterns: missing reviews correspond exactly to listings with 0 reviews, and missing revenue corresponds exactly to listings without price. Missing values are therefore kept, as they reflect real situations rather than errors.
+- `minimum_nights` is missing for 13.4% of Barcelona listings; the cause could not be identified, and the column is not central to the analysis.
+- `neighbourhood_group_cleansed` is empty for Amsterdam, so district-level comparisons across the three cities are not possible.
+
+**Column selection**
+- From 90 original columns, 21 were kept, covering location, property type, price, host, reviews and license.
+
+**Price**
+- Prices were stored as text (e.g. `"$1,234.00"`); the `$` and thousands separator were removed and the column converted to numeric. All three cities use EUR, despite the `$` symbol in the raw data.
+- Some listings have no price: 17.2% in Barcelona, 34.1% in Berlin and 43.1% in Amsterdam. They are kept in the dataset but excluded from price and revenue analyses, since revenue estimates depend on price. These listings are mostly inactive, so price analyses mainly reflect the active market (see Limitations).
+- Prices are strongly right-skewed (in Barcelona, mean 253€ vs median 191€), so the **median** is used instead of the mean.
+- Listings above the **99th price percentile of each city** are flagged as outliers (`is_price_outlier`) and excluded from price analyses. The most expensive listings had no reviews, and at least one showed a monthly price entered as nightly. A city-specific threshold is used because price levels differ between cities.
+
+**Data types**
+- `host_is_superhost` converted from `"t"`/`"f"` to boolean.
+- `last_review` converted from text to date.
+
+**Host type**
+- Hosts are grouped by the number of listings they manage in the city (`calculated_host_listings_count`): **single** (1), **multi** (2–9) and **professional** (10+).
+
+**License status**
+The `license` field is free text written by hosts, with a different format in each city. It was grouped into four categories, applied in this order (each rule overrides the previous one):
+1. `missing`: no license information
+2. `exempt`: contains "Exempt"
+3. `number_declared`: contains a digit (registration code)
+4. `identity_info`: contains "Legal entity name" or "First name and Last name". In Berlin, many hosts publish company or personal details instead of a registration number. These texts contain digits (postcodes, street numbers), so without this rule they would have been wrongly counted as `number_declared`.
+
+Limitations of this field:
+- Registration numbers are **self-declared and not validated** against official registries. Some are clearly placeholders (e.g. `HUTB-123456` in 12 listings in Barcelona, `ABCD 1234 AB12 89EF A0F9` in 10 listings in Amsterdam), so the real share of properly licensed listings is **at most** the `number_declared` share, and likely lower.
+- `identity_info` does not mean the listing is unlicensed, only that no registration number is shown.
+
+**Personal data**
+- The original `license` text was dropped from the clean dataset, as it contains host names and addresses. Raw license texts from Berlin are not displayed in the notebooks.
+
+**Dashboard support**
+- `is_top5_operator` flags listings belonging to the 5 largest hosts in each city. It is computed in Python so the dashboard can show the share of listings controlled by the largest operators.
+
+---
+
 ## Limitations
 
 - **Single snapshot:** the data shows each market at one point in time, not trends.
-- **Estimates:** occupancy and revenue are estimated by Inside Airbnb, not actual booking data.
+- **Estimates:** occupancy and revenue are estimated by Inside Airbnb from reviews, not actual booking data. Occupancy is capped at 70% of the year (~255 nights) by Inside Airbnb's model.
 - **No hotel data:** the analysis describes short-term rentals as a competitive context for hotels, but does not compare them directly.
+- **No cost data:** revenue figures show revenue potential, not profitability.
 - **Missing prices:** 43.1% of listings in Amsterdam, 34.1% in Berlin and 17.2% in Barcelona have no price or revenue estimate. These listings are mostly inactive, but 27.3% of active listings in Amsterdam have no price (13.2% in Berlin, 8.7% in Barcelona), so Amsterdam's price and revenue figures are the least representative.
 - **Licenses:** registration numbers are self-declared and not validated; some are clearly placeholders.
 - **Neighbourhoods:** cities use neighbourhood units of very different size (22 in Amsterdam, 68 in Barcelona, 137 in Berlin), so neighbourhood shares are only comparable within each city.
 - **City size:** Berlin's lower density partly reflects its large residential outskirts.
 
-## Tools
+---
 
-Python (pandas, seaborn), PostgreSQL, Tableau
+## Project Structure
+
+```
+airbnb_market_analysis/
+├── data/                     # not included (see How to Reproduce)
+├── notebooks/
+│   ├── 01_cleaning.ipynb     # cleaning, quality checks, load to PostgreSQL
+│   └── 02_analysis.ipynb     # maps and distributions
+├── sql/
+│   ├── 00_city_population.sql   # population table (run once)
+│   ├── q1_supply_size.sql
+│   ├── q2_pricing.sql
+│   ├── q3_performance.sql
+│   ├── q4_professionalisation.sql
+│   └── q5_regulation.sql
+├── visuals/                  # charts and dashboard screenshots
+├── README.md
+└── requirements.txt
+```
+
+## How to Reproduce
+1. Download the detailed `listings.csv.gz` for Barcelona, Berlin and Amsterdam from [Inside Airbnb](https://insideairbnb.com/get-the-data/) and save them in `data/raw/` as `barcelona-listings.csv.gz`, `berlin-listings.csv.gz` and `amsterdam-listings.csv.gz`.
+2. Install the requirements: `pip install -r requirements.txt`.
+3. Create a PostgreSQL database named `airbnb`.
+4. Run `notebooks/01_cleaning.ipynb`. It creates `data/clean/listings_clean.csv` and loads it into PostgreSQL.
+5. Run `sql/00_city_population.sql` once, then the analysis queries.
+6. Run `notebooks/02_analysis.ipynb` to create the charts.
+
+---
+
+*Analysis by Ander Gerhard · Data: Inside Airbnb*
