@@ -3,7 +3,7 @@
 Market intelligence analysis of the short-term rental market in three European cities, from the perspective of a **hospitality company**: how large and competitive the Airbnb supply is, what prices and revenue listings achieve, who runs the supply and how much of it declares a license.
 
 **Tools:** Python (pandas, matplotlib, seaborn) · PostgreSQL · Tableau
-**Interactive dashboard:** [View on Tableau Public](TABLEAU_PUBLIC_LINK)
+**Interactive dashboard:** [View on Tableau Public]([TABLEAU_PUBLIC_LINK](https://public.tableau.com/app/profile/ander.gerhard/viz/Airbnb_Market_Analysis/MarketOverview))
 
 ---
 
@@ -21,7 +21,7 @@ Market intelligence analysis of the short-term rental market in three European c
 
 ## Dashboard
 
-Two interactive pages built in Tableau: **[View on Tableau Public](TABLEAU_PUBLIC_LINK)**
+Two interactive pages built in Tableau: **[View on Tableau Public]([TABLEAU_PUBLIC_LINK](https://public.tableau.com/app/profile/ander.gerhard/viz/Airbnb_Market_Analysis/MarketOverview))**
 
 **Market overview:** supply, density, prices and revenue by room type.
 
@@ -74,7 +74,7 @@ This project analyses Airbnb listings in **Barcelona, Berlin and Amsterdam** fro
 | Data cleaning, quality checks and load to PostgreSQL | Python (pandas, SQLAlchemy) | [`notebooks/01_cleaning.ipynb`](notebooks/01_cleaning.ipynb) |
 | Business questions: aggregations, rankings and comparisons | SQL (PostgreSQL) | [`sql/`](sql/) |
 | Visual analysis: maps and distributions | Python (matplotlib, seaborn) | [`notebooks/02_analysis.ipynb`](notebooks/02_analysis.ipynb) |
-| Interactive dashboard | Tableau | [Tableau Public](TABLEAU_PUBLIC_LINK) |
+| Interactive dashboard | Tableau | [Tableau Public]([TABLEAU_PUBLIC_LINK](https://public.tableau.com/app/profile/ander.gerhard/viz/Airbnb_Market_Analysis/MarketOverview)) |
 
 ---
 
