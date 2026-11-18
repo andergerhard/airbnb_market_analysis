@@ -74,7 +74,7 @@ This project analyses Airbnb listings in **Barcelona, Berlin and Amsterdam** fro
 | Data cleaning, quality checks and load to PostgreSQL | Python (pandas, SQLAlchemy) | [`notebooks/01_cleaning.ipynb`](notebooks/01_cleaning.ipynb) |
 | Business questions: aggregations, rankings and comparisons | SQL (PostgreSQL) | [`sql/`](sql/) |
 | Visual analysis: maps and distributions | Python (matplotlib, seaborn) | [`notebooks/02_analysis.ipynb`](notebooks/02_analysis.ipynb) |
-| Interactive dashboard | Tableau | [Tableau Public]([TABLEAU_PUBLIC_LINK](https://public.tableau.com/app/profile/ander.gerhard/viz/Airbnb_Market_Analysis/MarketOverview)) |
+| Interactive dashboard | Tableau | [Tableau Public](https://public.tableau.com/app/profile/ander.gerhard/viz/Airbnb_Market_Analysis/MarketOverview) |
 
 ---
 
