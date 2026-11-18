@@ -25,11 +25,11 @@ Two interactive pages built in Tableau: **[View on Tableau Public]([TABLEAU_PUBL
 
 **Market overview:** supply, density, prices and revenue by room type.
 
-![Market overview dashboard](visuals/dashboard_market_overview.png)
+<kbd> ![Market overview dashboard](visuals/dashboard_market_overview.png)  </kbd>
 
 **Hosts & regulation:** professionalisation of the market and license status by city.
 
-![Hosts and regulation dashboard](visuals/dashboard_hosts_and_regulation.png)
+<kbd> ![Hosts and regulation dashboard](visuals/dashboard_hosts_and_regulation.png) </kbd>
 
 ---
 
