@@ -439,4 +439,4 @@ airbnb_market_analysis/
 
 ---
 
-*Analysis by Ander Gerhard · Data: Inside Airbnb*
+*Analysis by Ander Gerhard · [LinkedIn](https://www.linkedin.com/in/ander-gerhard-gaxiola-360643207/)*
