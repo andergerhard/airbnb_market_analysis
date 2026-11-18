@@ -3,7 +3,7 @@
 Market intelligence analysis of the short-term rental market in three European cities, from the perspective of a **hospitality company**: how large and competitive the Airbnb supply is, what prices and revenue listings achieve, who runs the supply and how much of it declares a license.
 
 **Tools:** Python (pandas, matplotlib, seaborn) · PostgreSQL · Tableau
-**Interactive dashboard:** [View on Tableau Public]([TABLEAU_PUBLIC_LINK](https://public.tableau.com/app/profile/ander.gerhard/viz/Airbnb_Market_Analysis/MarketOverview))
+**Interactive dashboard:** [View on Tableau Public](https://public.tableau.com/app/profile/ander.gerhard/viz/Airbnb_Market_Analysis/MarketOverview)
 
 ---
 
@@ -21,7 +21,7 @@ Market intelligence analysis of the short-term rental market in three European c
 
 ## Dashboard
 
-Two interactive pages built in Tableau: **[View on Tableau Public]([TABLEAU_PUBLIC_LINK](https://public.tableau.com/app/profile/ander.gerhard/viz/Airbnb_Market_Analysis/MarketOverview))**
+Two interactive pages built in Tableau: **[View on Tableau Public](https://public.tableau.com/app/profile/ander.gerhard/viz/Airbnb_Market_Analysis/MarketOverview)**
 
 **Market overview:** supply, density, prices and revenue by room type.
 
