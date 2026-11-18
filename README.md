@@ -39,15 +39,15 @@ Three analyses that go beyond aggregated figures ([`notebooks/02_analysis.ipynb`
 
 **Geographic concentration:** listings per hexagon within the same 20 x 20 km window around each city centre. Barcelona has a single dense core, Amsterdam a ring around the historic centre and Berlin several separate clusters.
 
-![Maps of listing concentration](visuals/01_maps.png)
+<kbd> <img src="visuals/01_maps.png" width="950"> </kbd>
 
 **Price distribution:** Amsterdam is the most expensive market for both entire homes and private rooms.
 
-![Price boxplot](visuals/02_price_boxplot.png)
+<kbd> <img src="visuals/02_price_boxplot.png" width="950"> </kbd>
 
 **Occupancy distribution:** Amsterdam's entire homes cluster around the 30-night cap, while in Barcelona and Berlin a large share of listings is occupied almost all year (the peak at ~255 nights is Inside Airbnb's 70% occupancy cap).
 
-![Occupancy distribution](visuals/03_occupancy_distribution.png)
+<kbd> <img src="visuals/03_occupancy_distribution.png" width="950"> </kbd>
 
 ---
 
