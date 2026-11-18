@@ -427,7 +427,6 @@ airbnb_market_analysis/
 │   └── q5_regulation.sql
 ├── visuals/                  # charts and dashboard screenshots
 ├── README.md
-└── requirements.txt
 ```
 
 ## How to Reproduce
